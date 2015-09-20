@@ -320,6 +320,8 @@ if !exists("b:match_words")
     let b:match_words = &matchpairs .
 		\ ',\<begin\>:\<end\>\W*$,'.
 		\
+                \ ',\<declare\>:\<begin\>:\<end\>\W*$,'.
+                \
                 \ s:notend . '\<if\>:'.
                 \ '\<elsif\>\|\<elseif\>\|\<else\>:'.
                 \ '\<end\s\+if\>,'.

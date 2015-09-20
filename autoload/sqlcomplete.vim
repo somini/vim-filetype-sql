@@ -169,7 +169,7 @@ if !exists('g:omni_sql_include_owner')
 endif
 " Default type of completion used when <C-X><C-O> is pressed
 if !exists('g:omni_sql_default_compl_type')
-    let g:omni_sql_default_compl_type = 'table'
+    let g:omni_sql_default_compl_type = 'syntax'
 endif
 
 " This function is used for the 'omnifunc' option.
@@ -271,7 +271,8 @@ function! sqlcomplete#Complete(findstart, base)
     " Allow maps to specify what type of object completion they want
     if exists('b:sql_compl_type')
         let compl_type = b:sql_compl_type
-        unlet b:sql_compl_type
+        " Why the fuck does this gets reset on every call?!
+        " unlet b:sql_compl_type
     endif
 
     if compl_type == 'tableReset'

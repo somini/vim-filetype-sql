@@ -653,6 +653,12 @@ function! s:SQLCGetSyntaxList(syn_group)
             let g:omni_syntax_group_include_sql = syn_group
             let syn_value                       = syntaxcomplete#OmniSyntaxList(syn_group)
         endif
+        " Turn the values to uppercase
+        " TODO: This doesn't work as expected, `ignorecase`?
+        if exists('g:sqlcomplete_uppercase') && g:sqlcomplete_uppercase
+            echom 'Turn into uppercase'
+            map(syn_value, 'toupper(v:val)')
+        endif
         let g:omni_syntax_group_include_sql = s:save_inc
         let g:omni_syntax_group_exclude_sql = s:save_exc
         " Cache these values for later use

@@ -49,7 +49,7 @@ setlocal indentkeys-=e
 " SQL is generally case insensitive, so this files assumes that
 " These keywords are something that would trigger an indent LEFT, not
 " an indent right, since the SQLBlockStart is used for those keywords
-setlocal indentkeys+==~end,=~else,=~elseif,=~elsif,0=~when,0=)
+setlocal indentkeys+==~end,=~else,=~elseif,=~elsif,0=~when,0=),~begin
 
 " GetSQLIndent is executed whenever one of the expressions
 " in the indentkeys is typed
@@ -69,10 +69,10 @@ set cpo&vim
 let s:SQLBlockStart = '^\s*\%('.
                 \ 'if\|else\|elseif\|elsif\|'.
                 \ 'while\|loop\|do\|for\|'.
-                \ 'begin\|'.
+                \ 'declare\|begin\|'.
                 \ 'case\|when\|merge\|exception'.
                 \ '\)\>'
-let s:SQLBlockEnd = '^\s*\(end\)\>'
+let s:SQLBlockEnd = '^\s*\(begin\)\>' "'end' is already hard-coded
 
 " The indent level is also based on unmatched paranethesis
 " If a line has an extra "(" increase the indent
@@ -381,6 +381,10 @@ function! GetSQLIndent()
             let ind = ind - ( &sw * (num_unmatched_right - ignore) )
         endif
         " endif
+    endif
+    if line =~? s:SQLBlockEnd
+        " unindent line
+        let ind = ind - &sw
     endif
 
     " echom 'final - indent ' . ind

@@ -12,7 +12,8 @@
 "
 " For version 5.x: Clear all syntax items
 " For version 6.x: Quit when a syntax file was already loaded
-if version < 600
+" For the contained version, don't clear the old syntax
+if version < 600 && exists('b:current_syntax_contain')
     syntax clear
 elseif exists("b:current_syntax")
     finish
@@ -34,6 +35,6 @@ elseif exists("g:sql_type_default")
 endif
 
 " Source the appropriate file
-exec 'runtime syntax/'.filename.'.vim'
+exec 'runtime syntax/'.filename.'_contained.vim'
 
-" vim:sw=4:
+" vim:sw=4:et

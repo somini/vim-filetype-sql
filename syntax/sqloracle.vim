@@ -5,7 +5,8 @@
 
 " For version 5.x: Clear all syntax items
 " For version 6.x: Quit when a syntax file was already loaded
-if version < 600
+" For the contained version, don't clear the old syntax
+if version < 600 && exists('b:current_syntax_contain')
   syntax clear
 elseif exists("b:current_syntax")
   finish
@@ -60,6 +61,19 @@ syn sync ccomment sqlComment
 " Todo.
 syn keyword sqlTodo contained TODO FIXME XXX DEBUG NOTE
 
+" Cursors
+syntax keyword sqlOperator OPEN FETCH CLOSE nextgroup=sqlCursor skipnl
+syntax match   sqlKeyword  @\v\c<exit>\s+<when>@
+
+" Functions
+syntax match sqlFunction /\v((<open>|<cursor>)\s+)@<!<\w+(\.\w+)*>\ze\(/
+syntax match sqlFunction_NamedArg @\v\c\zs\w+\ze\s+\=\>@
+
+" Types
+syntax keyword sqlKeyword DECLARE
+syntax keyword sqlKeyword ROWTYPE
+syntax match sqlType @\v\c<\w+\.\w+>\ze\%<(row)?type>@
+
 " Define the default highlighting.
 " For version 5.7 and earlier: only when not done already
 " For version 5.8 and later: only when an item doesn't have highlighting yet
@@ -71,15 +85,17 @@ if version >= 508 || !exists("did_sql_syn_inits")
     command -nargs=+ HiLink hi def link <args>
   endif
 
-  HiLink sqlComment	Comment
-  HiLink sqlKeyword	sqlSpecial
-  HiLink sqlNumber	Number
-  HiLink sqlOperator	sqlStatement
-  HiLink sqlSpecial	Special
-  HiLink sqlStatement	Statement
-  HiLink sqlString	String
-  HiLink sqlType	Type
-  HiLink sqlTodo	Todo
+  HiLink sqlComment           Comment
+  HiLink sqlKeyword           sqlSpecial
+  HiLink sqlNumber            Number
+  HiLink sqlOperator          sqlStatement
+  HiLink sqlSpecial           Special
+  HiLink sqlStatement         Statement
+  HiLink sqlString            String
+  HiLink sqlType              Type
+  HiLink sqlTodo              Todo
+  HiLink sqlFunction          Function
+  HiLink sqlFunction_NamedArg sqlType
 
   delcommand HiLink
 endif
